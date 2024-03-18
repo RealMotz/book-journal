@@ -14,13 +14,7 @@ import { RouterLink, RouterView } from 'vue-router'
     </div>
     </header>
 
-    <h1>Book Journal</h1>
+    <!-- <h1>Book Journal</h1> -->
     <RouterView />
   </div>
 </template>
-
-<style>
-h2 {
-  font-size: 20px;
-}
-</style>
