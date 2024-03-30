@@ -1,25 +1,18 @@
 <script setup>
 import Book from "@/components/Book.vue"
-import {ref} from 'vue'
+import apiClient from "@/services/EventService.js"
+import {ref, onMounted} from 'vue'
 
-const books = ref([
-  {
-    id: 1,
-    title: "Awesome Book"
-  },
-  {
-    id: 2,
-    title: "Awesome Book 2"
-  },
-  {
-    id: 3,
-    title: "Awesome Book 3"
-  },
-  {
-    id: 4,
-    title: "Awesome Book 4"
-  }
-])
+const books = ref(null)
+
+onMounted(() => {
+    apiClient.get("/books")
+      .then((res) => {
+        books.value = res.data.result
+        console.log('books:', res.data)})
+      .catch((error) => {
+        console.log(error) })
+})
 </script>
 
 <template>
