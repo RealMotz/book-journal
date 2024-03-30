@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type book struct {
-  Name string `json:"name"`
-  Description string `json:"description"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 func main() {
@@ -19,13 +19,13 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{
 			"result": []book{
 				{
-          Name: "Awesome book 1",
+					Name:        "Awesome book 1",
 					Description: "This is an awesome book",
-        },
+				},
 				{
-          Name: "Awesome book 2",
+					Name:        "Awesome book 2",
 					Description: "This is an awesome book 2",
-        },
+				},
 			},
 		})
 	})
