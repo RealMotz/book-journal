@@ -1,17 +1,19 @@
 <script setup>
 import Book from "@/components/Book.vue"
-import apiClient from "@/services/EventService.js"
-import {ref, onMounted} from 'vue'
+import apiClient from "@/services/BooksService.js"
+import { ref, onMounted } from 'vue'
 
 const books = ref(null)
 
 onMounted(() => {
-    apiClient.get("/books")
-      .then((res) => {
-        books.value = res.data.result
-        console.log('books:', res.data)})
-      .catch((error) => {
-        console.log(error) })
+  apiClient.get("/books")
+    .then((res) => {
+      books.value = res.data
+      console.log('books:', res.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 })
 </script>
 
@@ -19,12 +21,7 @@ onMounted(() => {
   <main>
     <h2>Currently Reading</h2>
     <div class="books">
-      <Book v-for="book in books" :key="book.id" :book="book"/>
-    </div>
-    <h2>To Read</h2>
-    <div class="books">
-      <Book v-for="book in books" :key="book.id" :book="book"/>
-      <div class="queue">Queue</div>
+      <Book v-for="book in books" :key="book.id" :book="book" />
     </div>
   </main>
 </template>
@@ -38,7 +35,7 @@ h2 {
 
 .books {
   display: flex;
-  flex-direction:row;
+  flex-direction: row;
   align-items: stretch;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -47,19 +44,5 @@ h2 {
 .books:hover {
   cursor: pointer;
 }
-
-.queue {
-  width: 150px;
-  height: 150px;
-  border: 1px solid #39495c;
-  padding: 10px;
-  font-size: 20px;
-  font-weight: 700;
-  text-align: center;
-  line-height: 130px;
-}
-.queue:hover {
-  transform: scale(1.01);
-  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
-}
 </style>
+@/services/BooksService.js
