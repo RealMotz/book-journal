@@ -10,24 +10,19 @@ import (
 
 type book struct {
 	Id          string `json:"id"`
-	Name        string `json:"name"`
+	Title       string `json:"title"`
 	Description string `json:"description"`
 	Notes       string `json:"notes"`
 }
 
 type bookResponse struct {
-	Name        string `json:"name"`
+	Title       string `json:"title"`
 	Description string `json:"description"`
 	Notes       string `json:"notes"`
 }
 
 var library = []book{
-	{Id: "1", Name: "Awesome book 1", Description: "This book is cool 1"},
-	{Id: "2", Name: "Awesome book 2", Description: "This book is cool 2"},
-	{Id: "3", Name: "Awesome book 3", Description: "This book is cool 3"},
-	{Id: "4", Name: "Awesome book 4", Description: "This book is cool 4"},
-	{Id: "5", Name: "Awesome book 5", Description: "This book is cool 5"},
-	{Id: "6", Name: "Awesome book 6", Description: "This book is cool 6"},
+	{Id: "1", Title: "Awesome book 1", Description: "This book is cool 1"},
 }
 
 func getBooks(c *gin.Context) {
@@ -57,7 +52,7 @@ func createBook(c *gin.Context) {
 
 	library = append(library, newBook)
 	c.IndentedJSON(http.StatusCreated, bookResponse{
-		Name:        newBook.Name,
+		Title:       newBook.Title,
 		Description: newBook.Description,
 		Notes:       newBook.Notes,
 	})
@@ -67,7 +62,7 @@ func deleteBook(c *gin.Context) {
 	id := c.Param("id")
 	for i, book := range library {
 		if book.Id == id {
-      deleteItem(library, i)
+			deleteItem(library, i)
 			c.IndentedJSON(http.StatusOK, book)
 			return
 		}
@@ -77,17 +72,34 @@ func deleteBook(c *gin.Context) {
 }
 
 func deleteItem(slice []book, index int) []book {
-  newSlice := make([]book, 0)
-  newSlice = append(newSlice, slice[:index]...)
-  return append(newSlice, slice[index+1:]...)
+	newSlice := make([]book, 0)
+	newSlice = append(newSlice, slice[:index]...)
+	return append(newSlice, slice[index+1:]...)
+}
+
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
 }
 
 func main() {
 	fmt.Println("Books API here")
 	router := gin.Default()
+	router.Use(CORSMiddleware())
 	router.GET("/books", getBooks)
 	router.GET("/books/:id", getBook)
 	router.POST("/books", createBook)
-  router.DELETE("/books/:id", deleteBook)
+	router.DELETE("/books/:id", deleteBook)
 	router.Run()
 }
