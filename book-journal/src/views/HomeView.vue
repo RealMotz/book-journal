@@ -9,7 +9,6 @@ onMounted(() => {
   apiClient.get("/books")
     .then((res) => {
       books.value = res.data
-      console.log('books:', res.data)
     })
     .catch((error) => {
       console.log(error)
@@ -45,4 +44,3 @@ h2 {
   cursor: pointer;
 }
 </style>
-@/services/BooksService.js

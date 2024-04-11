@@ -1,39 +1,29 @@
 <script setup>
 import Book from "@/components/Book.vue"
-import router from "@/router/index.js"
 import apiClient from "@/services/BooksService.js"
 import Modal from "@/components/ModalAddBook.vue"
 import { ref, onMounted } from 'vue'
 
 const books = ref(null)
 
-onMounted(() => {
-  apiClient.get("/books")
-    .then((res) => {
-      books.value = res.data
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+onMounted(async () => {
+  fetchAllBooks()
 })
 
-async function addBook() {
+async function fetchAllBooks() {
   try {
-    const newBook = await apiClient.post("/books");
-    router.push({
-      name: 'book-details',
-      params: { id: newBook.data.id }
-    })
-  } catch (error) {
-    console.log(error);
-  }
+      let allBooks = await apiClient.get("/books");
+      books.value = allBooks.data;
+    } catch (error) {
+      console.log(error);
+    }
 }
 </script>
 
 <template>
   <div class="about">
     <h1>Library</h1>
-    <Modal />
+    <Modal @book-created="fetchAllBooks" />
     <div class="books">
       <Book v-for="book in books" :key="book.id" :book="book" />
     </div>

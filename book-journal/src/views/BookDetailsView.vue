@@ -22,8 +22,9 @@ onMounted(async () => {
     <div v-if="book">
         <h1>Book View</h1>
         <div class="book-info">
-            <p>Name: {{ book.name }}</p>
+            <p>Name: {{ book.title }}</p>
             <p>Description: {{ book.description }}</p>
+            <div v-html="book.notes"></div>
         </div>
     </div>
 </template>
