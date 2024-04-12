@@ -1,4 +1,6 @@
 <script setup>
+import Card from 'primevue/card';
+
 defineProps({
   book: {
     type: Object,
@@ -10,22 +12,34 @@ defineProps({
 <template>
   <div class="book">
     <RouterLink :to="{ name: 'book-details', params: { id: book.id } }">
-      <h2>{{ book.title }}</h2>
-      <p>{{ book.description }}</p>
+      <Card>
+        <template #title>{{ book.title }}</template>
+        <template #content>
+          <p class="m-0">
+            {{ book.description }}
+          </p>
+        </template>
+      </Card>
     </RouterLink>
   </div>
 </template>
 
 <style scoped>
 .book {
+  text-decoration: none !important;
+  color: black;
   width: 200px;
-  border: 1px solid #39495c;
   margin-bottom: 18px;
   padding: 10px;
 }
 
-.book:hover {
+.p-card:hover {
   transform: scale(1.01);
   box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
+}
+
+a {
+  all: unset;
+  cursor: pointer;
 }
 </style>

@@ -12,11 +12,11 @@ onMounted(async () => {
 
 async function fetchAllBooks() {
   try {
-      let allBooks = await apiClient.get("/books");
-      books.value = allBooks.data;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await apiClient.get("/books");
+    books.value = response.data;
+  } catch (error) {
+    console.log(error);
+  }
 }
 </script>
 

@@ -5,14 +5,17 @@ import { ref, onMounted } from 'vue'
 
 const books = ref(null)
 
-onMounted(() => {
-  apiClient.get("/books")
-    .then((res) => {
-      books.value = res.data
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+onMounted(async () => {
+  try {
+    const response = await apiClient.get("/books", {
+      params: {
+        reading: true
+      }
+    });
+    books.value = response.data
+  } catch (error) {
+    console.log(error);
+  }
 })
 </script>
 
@@ -37,7 +40,7 @@ h2 {
   flex-direction: row;
   align-items: stretch;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 }
 
 .books:hover {

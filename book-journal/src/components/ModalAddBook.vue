@@ -2,9 +2,9 @@
 import Dialog from 'primevue/dialog';
 import Editor from 'primevue/editor';
 import apiClient from "@/services/BooksService.js"
-const emit = defineEmits(['bookCreated'])
 import { ref } from 'vue';
 
+const emit = defineEmits(['bookCreated'])
 const visible = ref(false)
 const title = ref('')
 const description = ref('')
@@ -43,7 +43,7 @@ async function createBook() {
                 <Editor v-model="notes" editorStyle="height: 320px" />
             </div>
             <div class="flex justify-content-end gap-2">
-                <Button type="button" severity="secondary" @click="visible=false">Cancel</Button>
+                <Button type="button" severity="secondary" @click="visible = false">Cancel</Button>
                 <Button type="submit">Create</Button>
             </div>
         </form>

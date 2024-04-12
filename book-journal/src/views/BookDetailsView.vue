@@ -1,13 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import apiClient from "@/services/BooksService.js"
+import Divider from 'primevue/divider';
 
+const book = ref(null)
 const props = defineProps({
     id: {
         required: true,
     }
 })
-const book = ref(null)
 
 onMounted(async () => {
     try {
@@ -17,14 +18,59 @@ onMounted(async () => {
         console.log(err);
     }
 })
+
+async function toggleReading() {
+    book.value.reading = !book.value.reading;
+    try {
+        const response = await apiClient.put(`/books`, book.value);
+        console.log(response);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 </script>
 <template>
     <div v-if="book">
-        <h1>Book View</h1>
         <div class="book-info">
-            <p>Name: {{ book.title }}</p>
-            <p>Description: {{ book.description }}</p>
+            <img class="book-image" src="https://placehold.co/600x400" alt="Image" />
+            <span>
+                <h1>Title</h1>
+                <div class="options">
+                    <Button :label="book.reading ? 'Stop Reading' : 'Start reading'"
+                        :severity="book.reading ? 'danger' : 'contrast'" rounded @click="toggleReading" />
+                </div>
+            </span>
+            <p>{{ book.title }}</p>
+            <Divider />
+
+            <h2>Description</h2>
+            <p>{{ book.description }}</p>
+            <Divider />
+
+            <h2>Notes</h2>
             <div v-html="book.notes"></div>
         </div>
     </div>
 </template>
+
+<style scoped>
+img {
+    width: 100%;
+    text-align: center;
+}
+
+span {
+    position: relative;
+}
+
+.options {
+    position: absolute;
+    right: 0;
+    top: 40px;
+}
+
+.options button {
+    width: 150px;
+}
+</style>
