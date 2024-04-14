@@ -13,7 +13,7 @@ defineProps({
   <div class="book">
     <RouterLink :to="{ name: 'book-details', params: { id: book.id } }">
       <Card>
-        <template #title>{{ book.title }}</template>
+        <template #title>{{ book.name }}</template>
         <template #content>
           <p class="m-0">
             {{ book.description }}

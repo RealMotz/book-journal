@@ -6,16 +6,16 @@ import { ref } from 'vue';
 
 const emit = defineEmits(['bookCreated'])
 const visible = ref(false)
-const title = ref('')
+const name = ref('')
 const description = ref('')
-const notes = ref('')
+const memo = ref('')
 
 async function createBook() {
     try {
         await apiClient.post("/books", {
-            title: title.value,
+            name: name.value,
             description: description.value,
-            notes: notes.value,
+            memo: memo.value,
         });
         emit('bookCreated')
         visible.value = false;
@@ -31,16 +31,16 @@ async function createBook() {
         <span class="p-text-secondary block mb-5"></span>
         <form action="post" @submit.prevent="createBook">
             <div class="flex align-items-center gap-3 mb-3">
-                <label for="title" class="font-semibold w-6rem">Title</label>
-                <InputText v-model="title" id="title" class="flex-auto" autocomplete="off" />
+                <label for="name" class="font-semibold w-6rem">Name</label>
+                <InputText v-model="name" id="name" class="flex-auto" autocomplete="off" />
             </div>
             <div class="flex align-items-center gap-3 mb-3">
                 <label for="description" class="font-semibold w-6rem">Description</label>
                 <InputText v-model="description" id="description" class="flex-auto" autocomplete="off" />
             </div>
             <div class="flex align-items-center gap-3 mb-5">
-                <label for="email" class="font-semibold w-6rem">Notes</label>
-                <Editor v-model="notes" editorStyle="height: 320px" />
+                <label for="memo" class="font-semibold w-6rem">Memo</label>
+                <Editor v-model="memo" id="memo" editorStyle="height: 320px" />
             </div>
             <div class="flex justify-content-end gap-2">
                 <Button type="button" severity="secondary" @click="visible = false">Cancel</Button>

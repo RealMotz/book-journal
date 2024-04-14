@@ -20,7 +20,7 @@ onMounted(async () => {
 })
 
 async function toggleReading() {
-    book.value.reading = !book.value.reading;
+    book.value.isReading = !book.value.isReading;
     try {
         const response = await apiClient.put(`/books`, book.value);
         console.log(response);
@@ -37,8 +37,8 @@ async function toggleReading() {
             <span>
                 <h1>Title</h1>
                 <div class="options">
-                    <Button :label="book.reading ? 'Stop Reading' : 'Start reading'"
-                        :severity="book.reading ? 'danger' : 'contrast'" rounded @click="toggleReading" />
+                    <Button :label="book.isReading ? 'Stop Reading' : 'Start reading'"
+                        :severity="book.isReading ? 'danger' : 'contrast'" rounded @click="toggleReading" />
                 </div>
             </span>
             <p>{{ book.title }}</p>
