@@ -19,6 +19,10 @@ go.work
 
 # Go executable
 book-journal
+out
+book
 
+# db
 backup/
 books.db
+

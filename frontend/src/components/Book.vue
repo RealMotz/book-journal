@@ -1,11 +1,16 @@
 <script setup>
 import Card from 'primevue/card';
+import { computed } from 'vue';
 
-defineProps({
+const props = defineProps({
   book: {
     type: Object,
     required: true,
   },
+})
+
+const shortDescription = computed(() => {
+  return props.book ? `${props.book.description.slice(0, 20)}...` : "";
 })
 </script>
 
@@ -13,10 +18,10 @@ defineProps({
   <div class="book">
     <RouterLink :to="{ name: 'book-details', params: { id: book.id } }">
       <Card>
-        <template #title>{{ book.name }}</template>
+        <template #title>{{ book.title }}</template>
         <template #content>
           <p class="m-0">
-            {{ book.description }}
+            {{ shortDescription }}
           </p>
         </template>
       </Card>
