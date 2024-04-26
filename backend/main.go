@@ -27,7 +27,6 @@ type apiConfig struct {
 	database *database.SqliteDB
 }
 
-
 func main() {
 	sqliteDB := sql.DB{}
 	db := database.SqliteDB{
@@ -44,7 +43,7 @@ func main() {
 	router.GET("/books", config.getBooks)
 	router.GET("/books/:id", config.getBook)
 	router.POST("/books", config.createBook)
-	router.PUT("/books", config.updateBook)
+  router.PUT("/books/:id", config.updateBook)
 	router.DELETE("/books/:id", config.deleteBook)
 	router.Run()
 }

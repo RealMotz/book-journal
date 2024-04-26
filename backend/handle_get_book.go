@@ -1,26 +1,29 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-
 func (cfg *apiConfig) getBook(c *gin.Context) {
 	param := c.Param("id")
-  id, err := strconv.Atoi(param)
-  if err != nil {
-    c.IndentedJSON(http.StatusInternalServerError, err)
-    return 
-  }
-  
-  book, err := cfg.database.Select(id)
-  if err != nil {
-    c.IndentedJSON(http.StatusInternalServerError, err)
-    return
-  }
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		fmt.Println("error fetching params?")
+		c.IndentedJSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	book, err := cfg.database.Select(id)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("error fetching book")
+		c.IndentedJSON(http.StatusInternalServerError, err)
+		return
+	}
 
 	c.IndentedJSON(http.StatusOK, book)
 }
