@@ -62,10 +62,10 @@ async function searchBook(event) {
     const query = event.query.toLocaleLowerCase().replace(" ", "+")
     try {
         const res = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=10`);
-        const filteredImg = res.data.items.filter((book) => {
+        const filteredBooks = res.data.items.filter((book) => {
             return book.volumeInfo.hasOwnProperty("imageLinks");
         })
-        books.value = filteredImg;
+        books.value = filteredBooks;
     } catch (error) {
         console.log(error);
     }
@@ -79,6 +79,7 @@ const getAuthors = function (option) {
 const onItemSelect = () => {
     title.value = selectedBook.value.volumeInfo.title;
     description.value = selectedBook.value.volumeInfo.description;
+    console.log(selectedBook.value)
 }
 </script>
 

@@ -12,6 +12,7 @@ declare module 'vue' {
     Button: typeof import('primevue/button')['default']
     InputText: typeof import('primevue/inputtext')['default']
     ModalAddBook: typeof import('./src/components/ModalAddBook.vue')['default']
+    ModalEditBook: typeof import('./src/components/ModalEditBook.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import apiClient from "@/services/BooksService.js"
 import Divider from 'primevue/divider';
+import EditBookModal from "@/components/ModalEditBook.vue"
 
 const book = ref(null)
 const props = defineProps({
@@ -11,19 +12,22 @@ const props = defineProps({
 })
 
 onMounted(async () => {
+    fetchBookData()
+})
+
+const fetchBookData = async function () {
     try {
         const response = await apiClient.get(`/books/${props.id}`);
         book.value = response.data;
-        console.log(book.value)
     } catch (err) {
         console.log(err);
     }
-})
+}
 
 async function toggleReading() {
     book.value.isReading = !book.value.isReading;
     try {
-        const response = await apiClient.put(`/books`, book.value);
+        await apiClient.put(`/books/${book.value.id}`, book.value);
     } catch (err) {
         console.log(err);
     }
@@ -35,13 +39,13 @@ async function toggleReading() {
         <div class="book-info">
             <img class="book-image" :src="book.thumbnail" alt="Image" />
             <span>
-                <h1>Title</h1>
+                <h1>{{ book.title }}</h1>
                 <div class="options">
+                    <EditBookModal :book="book" @book-updated="fetchBookData" />
                     <Button :label="book.isReading ? 'Stop Reading' : 'Start reading'"
                         :severity="book.isReading ? 'danger' : 'contrast'" rounded @click="toggleReading" />
                 </div>
             </span>
-            <div>{{ book.title }}</div>
             <div>{{ book.subtitle }}</div>
             <div>{{ book.authors }}</div>
             <div>{{ book.published_date }}</div>
