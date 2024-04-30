@@ -24,4 +24,8 @@ a {
   transition: 0.4s;
   padding: 3px;
 }
+
+.wrapper {
+  margin-bottom: 20px;
+}
 </style>

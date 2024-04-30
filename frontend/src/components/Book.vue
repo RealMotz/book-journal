@@ -1,6 +1,5 @@
 <script setup>
 import Card from 'primevue/card';
-import { computed } from 'vue';
 
 const props = defineProps({
   book: {
@@ -9,33 +8,42 @@ const props = defineProps({
   },
 })
 
-const shortDescription = computed(() => {
-  return props.book ? `${props.book.description.slice(0, 20)}...` : "";
-})
+const shortenStr = function (str) {
+  return str.length > 40 ? `${str.slice(0, 40)}...` : str;
+}
 </script>
 
 <template>
   <div class="book">
     <RouterLink :to="{ name: 'book-details', params: { id: book.id } }">
       <Card>
-        <template #title>{{ book.title }}</template>
+        <template #header>
+          <img alt="user header" :src="book.thumbnail" />
+        </template>
+        <template #title>{{ shortenStr(book.title) }}</template>
+        <template #subtitle>
+          <p class="m-0">{{ shortenStr(book.subtitle) }}</p>
+        </template>
         <template #content>
-          <p class="m-0">
-            {{ shortDescription }}
-          </p>
+          <p class="m-0">{{ book.authors }}</p>
         </template>
       </Card>
     </RouterLink>
   </div>
 </template>
 
-<style scoped>
+<style>
 .book {
   text-decoration: none !important;
   color: black;
   width: 200px;
   margin-bottom: 18px;
-  padding: 10px;
+  padding: 10px 10px 0 10px;
+}
+
+a {
+  all: unset;
+  cursor: pointer;
 }
 
 .p-card:hover {
@@ -43,8 +51,32 @@ const shortDescription = computed(() => {
   box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
 }
 
-a {
-  all: unset;
-  cursor: pointer;
+.p-card-body {
+  padding: 10px;
+  flex: 150px;
+  position: relative;
+}
+
+.p-card-header {
+  text-align: center;
+}
+
+.p-card-title {
+  font-size: medium;
+  line-height: normal;
+  max-height: 100px;
+}
+
+.p-card-subtitle {
+  font-size: small;
+}
+
+.p-card-subtitle p {
+  text-wrap: pretty;
+}
+
+.p-card-content {
+  position: absolute;
+  bottom: 10px;
 }
 </style>

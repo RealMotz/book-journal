@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { MdPreview } from 'md-editor-v3';
 import apiClient from "@/services/BooksService.js"
 import Divider from 'primevue/divider';
-import EditBookModal from "@/components/ModalEditBook.vue"
+import EditBookModal from "@/components/ModalEditBook.vue";
+import 'md-editor-v3/lib/style.css';
 
 const book = ref(null)
 const props = defineProps({
@@ -32,11 +34,11 @@ async function toggleReading() {
         console.log(err);
     }
 }
-
 </script>
+
 <template>
-    <div v-if="book">
-        <div class="book-info">
+    <main>
+        <div class="book-info" v-if="book">
             <img class="book-image" :src="book.thumbnail" alt="Image" />
             <span>
                 <h1>{{ book.title }}</h1>
@@ -57,9 +59,9 @@ async function toggleReading() {
             <Divider />
 
             <h2>Notes</h2>
-            <div v-html="book.memo"></div>
+            <MdPreview v-model="book.memo" scrollAuto="false" />
         </div>
-    </div>
+    </main>
 </template>
 
 <style scoped>
@@ -80,5 +82,9 @@ span {
 
 .options button {
     width: 150px;
+}
+
+.md-editor {
+    height: 100%;
 }
 </style>

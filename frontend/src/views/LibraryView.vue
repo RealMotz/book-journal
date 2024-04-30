@@ -8,7 +8,6 @@ import { ref, onMounted } from 'vue';
 const books = ref(null)
 
 onMounted(async () => {
-  console.log("mounted")
   fetchAllBooks()
 })
 
@@ -16,7 +15,6 @@ async function fetchAllBooks() {
   try {
     const response = await apiClient.get("/books");
     books.value = response.data;
-    console.log(response.data)
   } catch (error) {
     console.log(error);
   }
@@ -24,14 +22,16 @@ async function fetchAllBooks() {
 </script>
 
 <template>
-  <Toast></Toast>
-  <div class="about">
-    <h1>Library</h1>
-    <AddBookModal @book-created="fetchAllBooks" />
-    <div class="books">
-      <Book v-for="book in books" :key="book.id" :book="book" />
+  <main>
+    <Toast></Toast>
+    <div class="about">
+      <h1>Library</h1>
+      <AddBookModal @book-created="fetchAllBooks" />
+      <div class="books">
+        <Book v-for="book in books" :key="book.id" :book="book" />
+      </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <style scoped>
@@ -47,5 +47,10 @@ button {
 button:active {
   transform: translateY(4px);
   box-shadow: 0 1px #ffffff;
+}
+
+.books {
+  display: flex;
+  align-items: baseline;
 }
 </style>

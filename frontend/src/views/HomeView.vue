@@ -21,7 +21,7 @@ onMounted(async () => {
 
 <template>
   <main>
-    <h2>Currently Reading</h2>
+    <h1>Currently Reading</h1>
     <div class="books">
       <Book v-for="book in books" :key="book.id" :book="book" />
     </div>

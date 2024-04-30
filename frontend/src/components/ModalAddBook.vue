@@ -1,9 +1,9 @@
 <script setup>
-import Dialog from 'primevue/dialog';
-import Editor from 'primevue/editor';
-import AutoComplete from 'primevue/autocomplete';
-import apiClient from "@/services/BooksService.js"
 import { ref } from 'vue';
+import Dialog from 'primevue/dialog';
+import AutoComplete from 'primevue/autocomplete';
+import apiClient from "@/services/BooksService.js";
+import CustomModal from "@/components/Modal.vue";
 import axios from 'axios';
 
 const emit = defineEmits(['bookCreated'])
@@ -11,7 +11,7 @@ const emit = defineEmits(['bookCreated'])
 const visible = ref(false)
 const title = ref('')
 const description = ref('')
-const memo = ref('')
+const memo = ref("")
 
 const books = ref([])
 const selectedBook = ref({})
@@ -79,7 +79,10 @@ const getAuthors = function (option) {
 const onItemSelect = () => {
     title.value = selectedBook.value.volumeInfo.title;
     description.value = selectedBook.value.volumeInfo.description;
-    console.log(selectedBook.value)
+}
+
+const onMemoUpdate = function (text) {
+    memo.value = text;
 }
 </script>
 
@@ -119,7 +122,7 @@ const onItemSelect = () => {
             </div>
             <div class="flex align-items-center gap-3 mb-5">
                 <label for="memo" class="font-semibold w-6rem">Memo</label>
-                <Editor v-model="memo" id="memo" editorStyle="height: 320px" />
+                <CustomModal :memo="memo" @editor-text-changed="onMemoUpdate" />
             </div>
             <div class="flex justify-content-end gap-2">
                 <Button type="button" severity="secondary" @click="visible = false">Cancel</Button>

@@ -1,23 +1,22 @@
 <script setup>
 import { ref } from 'vue';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 import Dialog from 'primevue/dialog';
-import Editor from 'primevue/editor';
 import Textarea from 'primevue/textarea';
 import ConfirmDialog from 'primevue/confirmdialog';
-import { useConfirm } from "primevue/useconfirm";
 import Toast from 'primevue/toast';
-import { useToast } from "primevue/usetoast";
 import router from "@/router";
 import apiClient from "@/services/BooksService.js";
-const emit = defineEmits(['bookUpdated', 'bookDeleted']);
+import CustomModal from "@/components/Modal.vue";
 
+const emit = defineEmits(['bookUpdated', 'bookDeleted']);
 const props = defineProps({
     book: {
         type: Object,
         required: true,
     }
 });
-
 
 const confirm = useConfirm();
 const toast = useToast()
@@ -77,6 +76,10 @@ const confirmDelete = () => {
         reject: () => { }
     });
 }
+
+const onMemoUpdate = function (text) {
+    memo.value = text;
+}
 </script>
 
 <template>
@@ -92,7 +95,7 @@ const confirmDelete = () => {
             </div>
             <div class="flex align-items-center gap-3 mb-5">
                 <label for="memo" class="font-semibold w-6rem">Memo</label>
-                <Editor v-model="memo" id="memo" editorStyle="height: 320px" />
+                <CustomModal :memo="memo" @editor-text-changed="onMemoUpdate" />
             </div>
             <Button type="button" severity="danger" class="delete-book" @click="confirmDelete()">Delete</Button>
             <div class="flex justify-content-end gap-2">
