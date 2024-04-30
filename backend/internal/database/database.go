@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
+	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -23,6 +25,7 @@ type Book struct {
 	Description   string `json:"description"`
 	Memo          string `json:"memo"`
 	IsReading     bool   `json:"isReading"`
+	Read          bool   `json:"read"`
 }
 
 func (sqlite *SqliteDB) InitializeDB() {
@@ -43,7 +46,8 @@ func (sqlite *SqliteDB) InitializeDB() {
     info_link        TEXT,
     description      Text,
     memo             TEXT,
-    isReading        BOOLEAN);
+    isReading        BOOLEAN NOT NULL,
+    read             BOOLEAN NOT NULL);
   `
 	_, err = database.Exec(query)
 	if err != nil {
@@ -63,8 +67,9 @@ func (sqlite *SqliteDB) Insert(book Book) error {
 						info_link,
 						description,
 						memo,
-						isReading)
-	VALUES (?,?,?,?,?,?,?,?,?)
+            isReading,
+            read)
+	VALUES (?,?,?,?,?,?,?,?,?,?)
 	`
 	statement, err := sqlite.DB.Prepare(query)
 	if err != nil {
@@ -80,7 +85,8 @@ func (sqlite *SqliteDB) Insert(book Book) error {
 		book.InfoLink,
 		book.Description,
 		book.Memo,
-		book.IsReading)
+    false,
+    false)
 
 	if err != nil {
 		return err
@@ -93,11 +99,24 @@ func (sqlite *SqliteDB) CloseDB() error {
 	return sqlite.DB.Close()
 }
 
-func (sqlite *SqliteDB) SelectAll(isReading bool) ([]Book, error) {
+func (sqlite *SqliteDB) SelectAll(isReading bool, read bool) ([]Book, error) {
 	query := "SELECT * FROM books"
+
+	params := []string{}
 	if isReading {
-		query = query + " WHERE isReading = true"
+		q := fmt.Sprintf("isReading = %s", strconv.FormatBool(isReading))
+		params = append(params, q)
 	}
+	if read {
+		q := fmt.Sprintf("read = %s", strconv.FormatBool(read))
+		params = append(params, q)
+	}
+
+	if len(params) > 0 {
+		query = fmt.Sprintf("%s WHERE %s", query, strings.Join(params, " AND "))
+	}
+
+  fmt.Println(query)
 
 	rows, err := sqlite.DB.Query(query)
 	if err != nil {
@@ -119,7 +138,8 @@ func (sqlite *SqliteDB) SelectAll(isReading bool) ([]Book, error) {
 			&book.InfoLink,
 			&book.Description,
 			&book.Memo,
-			&book.IsReading)
+			&book.IsReading,
+      &book.Read)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -151,7 +171,8 @@ func (sqlite *SqliteDB) Select(id int) (Book, error) {
 		&book.InfoLink,
 		&book.Description,
 		&book.Memo,
-		&book.IsReading)
+		&book.IsReading,
+    &book.Read)
 
 	if err != nil {
 		fmt.Println("error fetching book data")
@@ -166,7 +187,8 @@ func (sqlite *SqliteDB) Update(id int, book Book) error {
 	SET
 		description = ?,
 		memo = ?,
-		isReading = ?
+		isReading = ?,
+    read = ?
 	WHERE id = ?
   `
 	statement, err := sqlite.DB.Prepare(query)
@@ -178,7 +200,8 @@ func (sqlite *SqliteDB) Update(id int, book Book) error {
 		book.Description,
 		book.Memo,
 		book.IsReading,
-    id)
+		book.Read,
+		id)
 	if err != nil {
 		return err
 	}
