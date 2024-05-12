@@ -30,7 +30,7 @@ func (cfg *apiConfig) getBook(c *gin.Context) {
 
 func (cfg *apiConfig) getBooks(c *gin.Context) {
 	reading := c.Query("reading")
-  read := c.Query("read")
+	read := c.Query("read")
 	books, err := cfg.database.SelectAll(reading == "true", read == "true")
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, struct{}{})

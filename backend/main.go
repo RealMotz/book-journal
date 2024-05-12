@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"log"
 
 	"github.com/RealMotz/book-journal/internal/database"
 	"github.com/gin-gonic/gin"
@@ -43,7 +44,10 @@ func main() {
 	router.GET("/books", config.getBooks)
 	router.GET("/books/:id", config.getBook)
 	router.POST("/books", config.createBook)
-  router.PUT("/books/:id", config.updateBook)
+	router.PUT("/books/:id", config.updateBook)
 	router.DELETE("/books/:id", config.deleteBook)
-	router.Run()
+  err := router.Run()
+  if err != nil {
+    log.Fatal(err)
+  }
 }
