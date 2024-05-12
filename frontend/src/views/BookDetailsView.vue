@@ -27,13 +27,20 @@ const fetchBookData = async function () {
 }
 
 async function toggleReading() {
-    book.value.isReading = !book.value.isReading;
+    if (book.value.isReading) {
+        book.value.isReading = false;
+        book.value.read = true;
+    } else {
+        book.value.isReading = true;
+    }
+
     try {
         await apiClient.put(`/books/${book.value.id}`, book.value);
     } catch (err) {
         console.log(err);
     }
 }
+
 </script>
 
 <template>
@@ -44,8 +51,9 @@ async function toggleReading() {
                 <h1>{{ book.title }}</h1>
                 <div class="options">
                     <EditBookModal :book="book" @book-updated="fetchBookData" />
-                    <Button :label="book.isReading ? 'Stop Reading' : 'Start reading'"
-                        :severity="book.isReading ? 'danger' : 'contrast'" rounded @click="toggleReading" />
+                    <Button :label="book.isReading ? 'Finish Reading' : book.read ? 'Read' : 'Start Reading'"
+                        :severity="book.isReading ? 'danger' : 'contrast'" rounded @click="toggleReading"
+                        :disabled="book.read" />
                 </div>
             </span>
             <div>{{ book.subtitle }}</div>

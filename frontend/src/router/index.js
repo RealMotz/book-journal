@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/LibraryView.vue')
     },
     {
+      path: '/books-read',
+      name: 'books-read',
+      component: () => import('../views/BooksReadView.vue')
+    },
+    {
       path: '/library/:id',
       name: 'book-details',
       props: true,

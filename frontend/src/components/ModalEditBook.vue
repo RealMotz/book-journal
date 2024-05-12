@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import Dialog from 'primevue/dialog';
@@ -7,6 +7,7 @@ import Textarea from 'primevue/textarea';
 import ConfirmDialog from 'primevue/confirmdialog';
 import Toast from 'primevue/toast';
 import router from "@/router";
+import Checkbox from 'primevue/checkbox';
 import apiClient from "@/services/BooksService.js";
 import CustomModal from "@/components/Modal.vue";
 
@@ -24,6 +25,7 @@ const toast = useToast()
 const visible = ref(false);
 const description = ref(props.book.description);
 const memo = ref(props.book.memo);
+const read = ref(props.book.read)
 
 async function updateBook() {
     try {
@@ -31,6 +33,7 @@ async function updateBook() {
             description: description.value,
             memo: memo.value,
             isReading: props.book.isReading,
+            read: read.value
         });
         emit('bookUpdated')
         toggleEditBook();
@@ -96,6 +99,10 @@ const onMemoUpdate = function (text) {
             <div class="flex align-items-center gap-3 mb-5">
                 <label for="memo" class="font-semibold w-6rem">Memo</label>
                 <CustomModal :memo="memo" @editor-text-changed="onMemoUpdate" />
+            </div>
+            <div class="flex align-items-center gap-3 mb-5">
+                <Checkbox id="read" v-model="read" :binary="true" value="Read" />
+                <label for="read" class="font-semibold w-6rem">Read</label>
             </div>
             <Button type="button" severity="danger" class="delete-book" @click="confirmDelete()">Delete</Button>
             <div class="flex justify-content-end gap-2">
